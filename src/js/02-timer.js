@@ -7,8 +7,12 @@ const valueDays = document.querySelector('span[data-days]');
 const valueHours = document.querySelector('span[data-hours]');
 const valueMinutes = document.querySelector('span[data-minutes]');
 const valueSeconds = document.querySelector('span[data-seconds]');
-const label = document.querySelectorAll('.label');
+const div = document.querySelector('.timer');
+const secondDiv = document.querySelectorAll('.field');
+const value = document.querySelectorAll('.value');
 
+
+btnStart.setAttribute('disabled', 'disabled');
 
 function convertMs(ms) {
   
@@ -18,23 +22,28 @@ function convertMs(ms) {
   const day = hour * 24;
 
   
-  const days = pad(Math.floor(ms / day));
+  const days = addLeadingZero(Math.floor(ms / day));
   
-  const hours = pad(Math.floor((ms % day) / hour));
+  const hours = addLeadingZero(Math.floor((ms % day) / hour));
   
-  const minutes = pad(Math.floor(((ms % day) % hour) / minute));
+  const minutes = addLeadingZero(Math.floor(((ms % day) % hour) / minute));
   
-  const seconds = pad(Math.floor((((ms % day) % hour) % minute) / second));
+  const seconds = addLeadingZero(Math.floor((((ms % day) % hour) % minute) / second));
 
     return { days, hours, minutes, seconds };
    
 };
 
-function pad(value) {
+function addLeadingZero(value) {
   return String(value).padStart(2, '0');
 };
 
-btnStart.setAttribute('disabled', 'disabled');
+function upDateForm({ days, hours, minutes, seconds }) {
+    valueDays.textContent = `${days}`;
+    valueHours.textContent = `${hours}`;
+    valueMinutes.textContent = `${minutes}`;
+    valueSeconds.textContent = `${seconds}`;
+}
 
 const options = {
     enableTime: true,
@@ -45,26 +54,47 @@ const options = {
         
         if (selectedDates[0] < new Date()) {
             window.alert("Please choose a date in the future");
-            selectedDates[0] = new Date();
+            return;
         }
         
-        btnStart.removeAttribute('disabled');
-
-        btnStart.addEventListener('click', onClick)
+        btnStart.removeAttribute('disabled'); 
+        
+        btnStart.addEventListener('click', onClick);
         function onClick() {
-            const intervalId = setInterval(() => {
-            const delta = selectedDates[0].getTime() - new Date().getTime();            
-            console.log(delta);
-            }, 1000)
-        }
-        
-    },   
-    
+            const intervalId = setInterval(() => {                
+                const ms = selectedDates[0].getTime() - new Date().getTime();
+                if (ms <= 0) {
+                    return;
+                }
+                const currentTime = convertMs(ms);
+                upDateForm(currentTime);
+            }, 1000);
+
+            btnStart.setAttribute('disabled', 'disabled');
+        }               
+    },    
 };
 
 flatpickr("#datetime-picker", options);
 
+ 
+// стилі
+div.style.display = 'flex';
+div.style.gap = '30px';
+dataForm.style.fontSize = '20px';
+btnStart.style.fontSize = '20px';
 
+secondDiv.forEach((elem) => {
+    elem.style.display = 'block';   
+    elem.style.textAlign = 'center';
+});
+value.forEach((elem) => {
+    elem.style.display = 'block';
+    elem.style.fontSize = '30px';
+    elem.style.fontWeight = '500';
+    elem.style.textAlign = 'center';
+    elem.style.color = 'green';
+});
 
 
 
