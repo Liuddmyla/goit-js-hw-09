@@ -54,7 +54,8 @@ const options = {
     onClose(selectedDates) {
         
         if (selectedDates[0] < new Date()) {
-            window.alert("Please choose a date in the future");
+            Notiflix.Notify.failure("Please choose a date in the future");
+            selectedDates[0] = new Date();
             return;
         }
         
@@ -88,10 +89,11 @@ btnStart.style.fontSize = '20px';
 secondDiv.forEach((elem) => {
     elem.style.display = 'block';   
     elem.style.textAlign = 'center';
+    
 });
 value.forEach((elem) => {
     elem.style.display = 'block';
-    elem.style.fontSize = '30px';
+    elem.style.fontSize = '40px';
     elem.style.fontWeight = '500';
     elem.style.textAlign = 'center';
     elem.style.color = 'green';
