@@ -30,6 +30,7 @@ function handleClickStop() {
     btnStop.setAttribute('disabled', 'disabled');
 }
 
+// стилі
 
 btnStart.style.padding = '20px 25px';
 btnStop.style.padding = '20px 25px';
