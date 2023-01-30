@@ -28,6 +28,10 @@ function onsubmitForm(event) {
   const step = Number(event.target.elements.step.value);
   let firstDelay = Number(event.target.elements.delay.value);  
   
+  if (firstDelay < 0 || step < 0 || amount <= 0) {
+    form.reset();
+      return;
+  }
   for (let i = 1; i <= amount; i += 1){
     
     createPromise(i, firstDelay)
